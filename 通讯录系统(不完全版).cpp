@@ -31,6 +31,8 @@ void AddPerson(Addressbooks* abs);//添加联系人
 void ShowPerson(Addressbooks* abs);//显示通讯录联系人
 void deletePerson(Addressbooks* abs,int number);//删除联系人
 int itExist(Addressbooks *abs, int size);//参数一通讯录 参数二人物编号
+int FindPerson(Addressbooks* abs, string name ,int con);
+int ChangePerson(Addressbooks* abs);
 
 
 
@@ -53,13 +55,17 @@ int main() {
 		switch (select)
 		{
 		case 1:  //添加联系人
+		{
 			system("cls");
 			AddPerson(&abs); //利用地址传递可以修改实际参数
 			break;
+		}
 		case 2:  //显示联系人
+		{
 			system("cls");
 			ShowPerson(&abs);
 			break;
+		}
 		case 3:  //删除联系人
 		{
 			int size;
@@ -110,11 +116,38 @@ int main() {
 
 				}
 			}
+			break;
 		}
-			break;
+			
 		case 4:  //查找联系人
+		{
+			int con = 0;
+			string name;
+			cout << "请输入要查找的联系人姓名" << endl;
+			cin >> name;
+			while (true)
+			{
+				int res = FindPerson(&abs, name, con);
+				if (res == -1)
+				{
+					cout << "没有更多联系人" << endl;
+					system("pause");
+					system("cls");
+					break;
+				}
+				else
+				{
+						con = res+1;
+						continue;
+			     }
+			
+
+			}
 			break;
+		}
+			
 		case 5:  //修改联系人
+			ChangePerson(&abs);
 			break;
 		case 6:  //清空联系人
 			break;
@@ -291,7 +324,7 @@ void ShowPerson(Addressbooks* abs)
 }
 
 
-int itExist(Addressbooks* abs, int size)
+int itExist(Addressbooks* abs, int size )
 {
 	for (int i = 0; i < abs->m_Size; i++)
 	{
@@ -313,4 +346,31 @@ void deletePerson(Addressbooks* abs , int number)
 	abs->m_Size--;
 	abs->personArray->m_Size--;
 	
+}
+
+
+
+
+
+int FindPerson(Addressbooks* abs, string name , int con)
+{
+	 
+	for (int i = con; i < abs->m_Size; i++)
+	{
+		if (abs->personArray[i].m_Name == name)
+		{
+		
+			cout << "发现此联系人 :" 
+				<< "姓名：" << abs->personArray[i].m_Name << '\t' 
+				<< "年龄：" << abs->personArray[i].m_Age << '\t' 
+				<< "性别 :" << abs->personArray[i].m_Sex << '\t' 
+				<< "电话："  << abs->personArray[i].m_Phone << '\t'
+				<< "住址：" << abs->personArray[i].m_Address << '\t' 
+				<< "编号：" << abs->personArray[i + 1].m_Size  << endl;
+			return i;
+		}
+		
+	}
+	return -1;
+
 }
